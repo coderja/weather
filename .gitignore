@@ -1,0 +1,5 @@
+/dist
+/node_modules
+rev-manifest.json
+npm-debug.log
+*.zip

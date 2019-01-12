@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="jquery-1.11.3.js"></script>
+</head>
+<body>
+<select name="" id="pro">
+    <option value="-1">==请选择==</option>
+</select>
+<select name="" id="city" style="display: none">
+
+</select>
+<select name="" id="xian" style="display: none">
+
+</select>
+<div id="content"><span></span></div>
+<script>
+   
+
+
+    $.ajax({
+        type: 'GET',
+        url: "/provice",
+        success: function (data) {
+            console.log(data)
+            for (var p in data) {
+                $(`<option value="${p}">${data[p]}</option>`).appendTo($('#pro'))
+            }
+        }
+    })
+
+
+    function loadCity(n){
+       // console.log(n)
+        $.ajax({
+            type:'get',
+            url:"/city",
+            data:{cid:n},
+            dataType:'json',
+            success:function(data){
+                $('#city').empty().show()
+                $('<option>==请选择==</option>').appendTo($('#city'))
+                for(var p in data){
+                    $(`<option value="${n}${p}">${data[p]}</option>`).appendTo($('#city'))
+
+                }
+            }
+        })
+    }
+    function loadXian(str){
+        $.ajax({
+            type:'GET',
+            url:"/xian",
+            data:{cname:str},
+            dataType:'json',
+            success:function(data){
+                console.log(data)
+                $('#xian').empty().show()
+                $('<option>==请选择==</option>').appendTo($('#xian'))
+                for(var p in data){
+                    $(`<option value="${str}${p}">${data[p]}</option>`).appendTo($('#xian'))
+
+                }
+            }
+        })
+    }
+    $('#pro').change(()=>{
+        var n = $('#pro').val()
+        console.log(n)
+        loadCity(n)
+    })
+    $('#city').change(()=>{
+        var n = $('#city').val()
+        var str = $('#city').val()
+        console.log(str,"???????????")
+        loadXian(str)
+    })
+    $('#xian').change((e)=>{
+        var id = $(e.target).val()
+        console.log(id)
+        $.ajax({
+            type: 'get',
+            url: '/weather',
+            data: {id: id},
+            success: function (data) {
+                console.log(data)
+            }
+        })
+    })
+
+</script>
+</body>
+</html>
